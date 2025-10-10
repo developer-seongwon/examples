@@ -6,5 +6,7 @@ import java.util.Optional;
 
 public interface RateRepository {
 
+    String DATA_FILE = "../../../data/records.json";
+
     Optional<UserEntity> findByUserNameAndTag(String userName, String tag);
 }

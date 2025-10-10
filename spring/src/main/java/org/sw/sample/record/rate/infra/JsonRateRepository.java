@@ -8,6 +8,7 @@ import org.sw.sample.record.rate.domain.entity.UserEntity;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +18,7 @@ import java.util.Optional;
 @Repository
 public class JsonRateRepository implements RateRepository {
 
-    private static final String DATA_FILE = "./data/records.json";
+    private static final String DATA_FILE = "./spring/data/records.json";
     private final List<UserEntity> users;
 
     public JsonRateRepository() throws IOException {

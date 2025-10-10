@@ -8,6 +8,7 @@ import org.sw.sample.record.user.domain.UserRepository;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -15,12 +16,11 @@ import java.util.List;
  */
 @Repository
 public class JsonUserRepository implements UserRepository {
-
-    private static final String DATA_FILE = "./data/records.json";
+    private static final String DATA_FILE = "./spring/data/records.json";
     private final List<UserEntity> users;
 
     public JsonUserRepository() throws IOException {
-        this.users = new ObjectMapper().readValue(new File(DATA_FILE), new TypeReference<>() {
+                     this.users = new ObjectMapper().readValue(new File(DATA_FILE), new TypeReference<>() {
         });
     }
 
