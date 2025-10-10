@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 
 public class NotFoundException extends CommonException {
     public static final String NOT_FOUND_PATH = "Not Found Path";
+    public static final String NOT_FOUND_USER = "Not Found User";
     private final String reason;
 
     private NotFoundException(String reason, String message) {
@@ -26,5 +27,8 @@ public class NotFoundException extends CommonException {
         return new NotFoundException(NOT_FOUND_PATH, "요청하신 경로를 찾을 수 없습니다: " + message);
     }
 
+    public static NotFoundException ofUser(String message) {
+        return new NotFoundException(NOT_FOUND_USER, "요청하신 사용자를 찾을 수 없습니다: " + message);
+    }
 
 }
