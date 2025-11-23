@@ -16,7 +16,12 @@ open class NotFoundException private constructor(
         const val NOT_FOUND_PATH = "Not Found Path"
 
         fun ofPath(detail: String, cause: Throwable? = null): NotFoundException {
-            return NotFoundException(NOT_FOUND_PATH, detail, "/NotFoundPage", cause)
+            return NotFoundException(
+                title = NOT_FOUND_PATH,
+                detail = detail,
+                instance = "/NotFoundPage",
+                cause = cause
+            )
         }
     }
 }

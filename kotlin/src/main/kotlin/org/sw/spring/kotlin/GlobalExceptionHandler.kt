@@ -21,7 +21,7 @@ class GlobalExceptionHandler {
     @ExceptionHandler(CommonException::class)
     fun handleCommonExceptions(
         servlet: HttpServletRequest,
-        cause: NotFoundException
+        cause: CommonException
     ): ResponseEntity<ProblemDetail> {
         return ProblemDetail.forStatus(cause.status).apply {
             type = URI.create(servlet.requestURI)
