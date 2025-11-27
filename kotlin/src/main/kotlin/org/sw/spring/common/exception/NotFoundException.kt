@@ -1,6 +1,5 @@
-package org.sw.spring.kotlin.exception
+package org.sw.spring.common.exception
 
-import jakarta.websocket.CloseReason
 import org.springframework.http.HttpStatus
 
 open class NotFoundException private constructor(

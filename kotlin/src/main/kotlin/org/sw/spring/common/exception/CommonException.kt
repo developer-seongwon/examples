@@ -1,4 +1,4 @@
-package org.sw.spring.kotlin.exception
+package org.sw.spring.common.exception
 
 import org.springframework.http.HttpStatus
 import java.lang.RuntimeException
@@ -10,6 +10,6 @@ open class CommonException(
     val instance: String,
     cause: Throwable? = null,
 ) : RuntimeException(
-    "$title, $detail", cause
+    "$title, $detail($instance)", cause
 ) {
 }

@@ -1,4 +1,4 @@
-package org.sw.spring.kotlin
+package org.sw.spring.common
 
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
@@ -7,8 +7,7 @@ import org.springframework.http.ProblemDetail
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
-import org.sw.spring.kotlin.exception.CommonException
-import org.sw.spring.kotlin.exception.NotFoundException
+import org.sw.spring.common.exception.CommonException
 import java.net.URI
 
 @RestControllerAdvice
