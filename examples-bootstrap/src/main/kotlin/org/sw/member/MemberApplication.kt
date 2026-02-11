@@ -1,11 +1,11 @@
-package org.sw.spring.kotlin
+package org.sw.member
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class KotlinDemoApplication
+class MemberDddApplication
 
 fun main(args: Array<String>) {
-    runApplication<KotlinDemoApplication>(*args)
+    runApplication<MemberDddApplication>(*args)
 }

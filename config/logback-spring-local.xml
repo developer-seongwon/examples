@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 속성 정의 -->
+    <property name="LOG_ROOT" value="./logs"/>
+
+    <property name="STD_LOG_PATH" value="${LOG_ROOT}/std"/>
+
+    <property name="TXT_ROOT" value="${LOG_ROOT}/txt"/>
+    <property name="ERROR_TXT_PATH" value="${TXT_ROOT}/errorLog"/>
+    <property name="OUT_TXT_PATH" value="${TXT_ROOT}/outLog"/>
+    <property name="CALL_TXT_PATH" value="${TXT_ROOT}/callLog"/>
+
+    <property name="ELK_ROOT" value="${LOG_ROOT}/elk"/>
+    <property name="ERROR_ELK_PATH" value="${ELK_ROOT}/errorLog"/>
+    <property name="OUT_ELK_PATH" value="${ELK_ROOT}/outLog"/>
+    <property name="CALL_ELK_PATH" value="${ELK_ROOT}/callLog"/>
+
+    <property name="STD_LEVEL" value="INFO"/>
+    <property name="CALL_LEVEL" value="DEBUG"/>
+    <property name="OUT_LEVEL" value="DEBUG"/>
+    <property name="ERROR_LEVEL" value="DEBUG"/>
+
+    <!-- 커스텀 컨버터 -->
+    <conversionRule conversionWord="direction" converterClass="org.sw.member.infra.logback.DirectionConverter"/>
+
+    <!-- 콘솔 출력 -->
+    <appender name="STD_LOG" class="org.sw.member.infra.logback.ThrowableConsoleAppender">
+        <level>2</level>
+        <encoder>
+            <pattern>[%d] %-5level - %direction[%X{transactionId}] %msg %n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="STD_LOG_FILE" class="org.sw.member.infra.logback.ThrowableRollingFileAppender">
+        <level>2</level>
+        <file>${STD_LOG_PATH}/std.log</file>
+        <encoder>
+            <pattern>[%d] %-5level - %direction[%X{transactionId}]  %msg %n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${STD_LOG_PATH}/%d{yyyy/MM/dd}/std.log.%i</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>10GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- OUT 마커 필터 파일 -->
+    <appender name="OUT_TXT_FILE" class="org.sw.member.infra.logback.ThrowableRollingFileAppender">
+        <level>0</level>
+        <file>${OUT_TXT_PATH}/out.log</file>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+                <marker>OUT</marker>
+            </evaluator>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>[%d] %-5level - %direction[%X{transactionId}]  %msg %n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${OUT_TXT_PATH}/%d{yyyy/MM/dd}/out.log.%i</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>3GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- CALL 마커 필터 파일 -->
+    <appender name="CALL_TXT_FILE" class="org.sw.member.infra.logback.ThrowableRollingFileAppender">
+        <level>1</level>
+        <file>${CALL_TXT_PATH}/call.log</file>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+                <marker>CALL</marker>
+            </evaluator>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>[%d] %-5level - %direction[%X{transactionId}]  %msg %n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${CALL_TXT_PATH}/%d{yyyy/MM/dd}/call.log.%i</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>3GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="ERROR_TXT_FILE" class="org.sw.member.infra.logback.ThrowableRollingFileAppender">
+        <level>2</level>
+        <file>${ERROR_TXT_PATH}/error.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <encoder>
+            <pattern>[%d] %-5level - %direction[%X{transactionId}]  %msg %n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${ERROR_TXT_PATH}/%d{yyyy/MM/dd}/error.log.%i</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>3GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- ERROR 레벨 필터 파일 (JSON) -->
+    <appender name="ERROR_ELK_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${ERROR_ELK_PATH}/error.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp/>
+                <logLevel/>
+                <mdc>
+                    <includeMdcKeyName>transactionId</includeMdcKeyName>
+                    <includeMdcKeyName>apiId</includeMdcKeyName>
+                    <includeMdcKeyName>seqId</includeMdcKeyName>
+                </mdc>
+                <message/>
+                <stackTrace/>
+            </providers>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${ERROR_ELK_PATH}/%d{yyyy/MM/dd}/error.log.%i</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>3GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <root level="${STD_LEVEL}">
+        <appender-ref ref="STD_LOG"/>
+        <appender-ref ref="STD_LOG_FILE"/>
+        <!-- 에러 로그 -->
+        <appender-ref ref="ERROR_TXT_FILE"/>
+        <appender-ref ref="ERROR_ELK_FILE"/>
+        <!-- 수집 로그 -->
+        <appender-ref ref="OUT_TXT_FILE"/>
+<!--        <appender-ref ref="OUT_ELK_FILE"/>-->
+        <!-- 수행 로그 -->
+        <appender-ref ref="CALL_TXT_FILE"/>
+<!--        <appender-ref ref="CALL_ELK_FILE"/>-->
+    </root>
+</configuration>
